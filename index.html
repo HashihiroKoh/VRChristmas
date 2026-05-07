@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>MerryChristmas</title>
+    <meta name="viewport" content="MerryChristmas" />
+    <script src="https://aframe.io/releases/1.0.3/aframe.min.js"></script>
+    <script src="https://unpkg.com/aframe-environment-component@1.0.0/dist/aframe-environment-component.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/donmccurdy/aframe-extras@v6.1.1/dist/aframe-extras.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/aframe-extras@6.1.1/dist/aframe-extras.min.js"></script>
+    <script src="https://unpkg.com/aframe-particle-system-component@1.0.x/dist/aframe-particle-system-component.min.js"></script>
+
+    <script>
+      AFRAME.registerComponent("soundclick", {
+        init: function () {
+          this.el.addEventListener("mousedown", function (e) {
+            let bt = document.querySelector('#soundbtn');
+            //let img = document.getElementById("btimage");
+            const jingleBell = document.getElementById("jingleBell");
+            const bgm = jingleBell.components.sound; //音源にアクセス
+            if (bgm.isPlaying) {
+              //img.setAttribute("src", "#off");
+              bt.setAttribute("src","#off");
+              bgm.stopSound();
+            } else {
+              //img.setAttribute("src", "#on");
+              bt.setAttribute("src","#on");
+              bgm.playSound();
+            }
+          });
+        },
+      });
+    </script>
+  </head>
+
+  <body style="margin: 0; overflow: hidden">
+    <a-scene>
+      <a-assets>
+        <audio id="sound" src="./assets/Jinglebells.mp3" preload="auto"></audio>
+        <img id="on" src="./assets/soundON.png" crossorigin="anonymous"></img>
+        <img id="off" src="./assets/soundOFF.png" crossorigin="anonymous"></img>
+        <a-asset-item id="tree" src="./assets/tree.glb"></a-asset-item>       
+        <a-asset-item id="santa" src="./assets/santa.glb"></a-asset-item>
+        <a-asset-item id="giftA" src="./assets/GiftBox_A.glb"></a-asset-item>
+        <a-asset-item id="giftB" src="./assets/GiftBox_B.glb"></a-asset-item>
+        <a-asset-item id="giftC" src="./assets/GiftBox_C.glb"></a-asset-item>
+        <a-asset-item id="snowmanS" src="./assets/Yukidaruma_S.glb"></a-asset-item>
+        <a-asset-item id="snowmanL" src="./assets/Yukidaruma_L.glb"></a-asset-item>
+        <a-asset-item id="pq" src="./assets/PQchan.glb"></a-asset-item>
+      </a-assets>
+      
+      <a-sound id="jingleBell" position="3 3 -1" sound="src: #sound; autoplay: false; loop:true" volume="1"></a-sound>
+      
+      <a-camera id="camera" position="0 0 0" wasd-controls="enabled:false">
+        <a-entity cursor="rayOrigin: mouse"> </a-entity>
+        <!--
+        <a-circle
+          soundclick
+          radius="0.15"
+          material="color: yellow"
+          position="0 -1.4 -2"
+          class="collidable"
+        >
+          <a-image id="btimage" src="#off" width="0.17" height="0.17"></a-image>
+        </a-circle>
+        -->
+        <a-image id="soundbtn" soundclick src="#off" position="0 -1.4 -2" height="0.3" width="0.3"></a-image>
+      </a-camera>
+      <a-sky src="./assets/SunshineAqua.jpg"></a-sky>
+      <a-entity
+        position="0 15 0"
+        particle-system="preset:snow; color: #fffafa,#f0f8ff;size:5;maxAge:2;"
+      ></a-entity>
+      <a-entity
+        id="santa-chan"
+        scale="0.1 0.1 0.1"
+        gltf-model="#santa"
+        animation-mixer
+      >
+        <script>
+          const el = document.querySelector("#santa-chan");
+          const radiusX = 30;
+          const radiusY = 30;
+          var angle = 92;
+          var move = function () {
+            angle -= 2;
+            if (angle == -360) {
+              angle = 0;
+            }
+            let radian = (angle * Math.PI) / 180;
+
+            var x = Math.cos(radian) * radiusX;
+            var z = Math.sin(radian) * radiusY;
+            el.setAttribute("position", { x: -x, y: 15, z: z });
+            el.setAttribute("rotation", {
+              x: 0,
+              y: angle,
+              z: 0,
+            });
+          };
+          setInterval(move, 100);
+        </script>
+      </a-entity>
+      
+      <a-entity
+        rotation="0 30 0"
+        position="-3 -2 -3"
+        scale="0.02 0.02 0.02"
+        gltf-model="#pq"
+        animation-mixer
+      ></a-entity>   
+      
+      <a-entity position="3 -5 5" scale="6 6 6" gltf-model="#tree"></a-entity>
+      <a-sphere
+        position="3 6 5"
+        radius="0.15"
+        color="yellow"
+        animation="property: material.opacity;
+             from: 0;
+             to: 1;
+             dir: alternate;
+             dur: 1000;
+             loop: true"
+      ></a-sphere>      
+      <a-sphere
+        position="3 4 4.5"
+        radius="0.15"
+        color="red"
+        animation="property: material.opacity;
+             from: 0;
+             to: 1;
+             dir: alternate;
+             dur: 1500;
+             loop: true"
+      ></a-sphere>
+      <a-sphere
+        position="2.5 3 4.5"
+        radius="0.15"
+        color="cyan"
+        animation="property: material.opacity;
+             from: 0;
+             to: 1;
+             dir: alternate;
+             dur: 1300;
+             loop: true"
+      ></a-sphere>
+      <a-sphere
+        position="2 1.5 4.5"
+        radius="0.15"
+        color="orange"
+        animation="property: material.opacity;
+             from: 0;
+             to: 1;
+             dir: alternate;
+             dur: 1700;
+             loop: true"
+      ></a-sphere>
+      <a-sphere
+        position="3 1 4"
+        radius="0.15"
+        color="green"
+        animation="property: material.opacity;
+             from: 0;
+             to: 1;
+             dir: alternate;
+             dur: 1100;
+             loop: true"
+      ></a-sphere>
+      <a-sphere
+        position="2.5 0 4.5"
+        radius="0.15"
+        color="tomato"
+        animation="property: material.opacity;
+             from: 0;
+             to: 1;
+             dir: alternate;
+             dur: 1500;
+             loop: true"
+      ></a-sphere>
+      <a-sphere
+        position="3 -1 4.5"
+        radius="0.15"
+        color="yellow"
+        animation="property: material.opacity;
+             from: 0;
+             to: 1;
+             dir: alternate;
+             dur: 1200;
+             loop: true"
+      ></a-sphere>
+      <a-sphere
+        position="1.5 -2 4.5"
+        radius="0.15"
+        color="blue"
+        animation="property: material.opacity;
+             from: 0;
+             to: 1;
+             dir: alternate;
+             dur: 1300;
+             loop: true"
+      ></a-sphere>
+      <a-sphere
+        position="3 -2 3.5"
+        radius="0.15"
+        color="pink"
+        animation="property: material.opacity;
+             from: 0;
+             to: 1;
+             dir: alternate;
+             dur: 1100;
+             loop: true"
+      ></a-sphere>
+      <a-entity
+        rotation="20 95 -15"
+        gltf-model="#giftA"
+      ></a-entity>
+      <a-entity
+        rotation="10 90 -25"
+        gltf-model="#giftB"
+      ></a-entity>
+      <a-entity
+        rotation="20 110 -15"
+        gltf-model="#giftC"
+      ></a-entity>
+      
+      <a-entity
+        rotation="0 160 0"
+        position="-0.6 -3 3.3"
+        scale="2 2 2"
+        gltf-model="#snowmanL"
+        ></a-entity>
+     <a-entity
+        rotation="0 0 0"
+        position="1.5 -3 -4"
+        scale="2 2 2"
+        gltf-model="#snowmanS"
+      ></a-entity>
+      <a-text
+        position="1 17 -15"
+        rotation="90 0 0"
+        width="53"
+        value="MerryChristmas!"
+        color="#D865FF"
+        font="HighSummit-msdf.json"
+        font-image="HighSummit.png"
+        negate="false"
+        animation="property: text.opacity;
+             from: 0;
+             to: 1;
+             dir: alternate;
+             dur: 3000;
+             loop: true"
+      >
+      </a-text>
+    </a-scene>
+  </body>
+</html>
