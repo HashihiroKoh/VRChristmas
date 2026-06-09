@@ -53,17 +53,6 @@
       
       <a-camera id="camera" position="0 0 0" wasd-controls="enabled:false">
         <a-entity cursor="rayOrigin: mouse"> </a-entity>
-        <!--
-        <a-circle
-          soundclick
-          radius="0.15"
-          material="color: yellow"
-          position="0 -1.4 -2"
-          class="collidable"
-        >
-          <a-image id="btimage" src="#off" width="0.17" height="0.17"></a-image>
-        </a-circle>
-        -->
         <a-image id="soundbtn" soundclick src="#off" position="0 -1.4 -2" height="0.3" width="0.3"></a-image>
       </a-camera>
       <a-sky src="./assets/SunshineAqua.jpg"></a-sky>
@@ -111,105 +100,8 @@
       ></a-entity>   
       
       <a-entity position="3 -5 5" scale="6 6 6" gltf-model="#tree"></a-entity>
-      <a-sphere
-        position="3 6 5"
-        radius="0.15"
-        color="yellow"
-        animation="property: material.opacity;
-             from: 0;
-             to: 1;
-             dir: alternate;
-             dur: 1000;
-             loop: true"
-      ></a-sphere>      
-      <a-sphere
-        position="3 4 4.5"
-        radius="0.15"
-        color="red"
-        animation="property: material.opacity;
-             from: 0;
-             to: 1;
-             dir: alternate;
-             dur: 1500;
-             loop: true"
-      ></a-sphere>
-      <a-sphere
-        position="2.5 3 4.5"
-        radius="0.15"
-        color="cyan"
-        animation="property: material.opacity;
-             from: 0;
-             to: 1;
-             dir: alternate;
-             dur: 1300;
-             loop: true"
-      ></a-sphere>
-      <a-sphere
-        position="2 1.5 4.5"
-        radius="0.15"
-        color="orange"
-        animation="property: material.opacity;
-             from: 0;
-             to: 1;
-             dir: alternate;
-             dur: 1700;
-             loop: true"
-      ></a-sphere>
-      <a-sphere
-        position="3 1 4"
-        radius="0.15"
-        color="green"
-        animation="property: material.opacity;
-             from: 0;
-             to: 1;
-             dir: alternate;
-             dur: 1100;
-             loop: true"
-      ></a-sphere>
-      <a-sphere
-        position="2.5 0 4.5"
-        radius="0.15"
-        color="tomato"
-        animation="property: material.opacity;
-             from: 0;
-             to: 1;
-             dir: alternate;
-             dur: 1500;
-             loop: true"
-      ></a-sphere>
-      <a-sphere
-        position="3 -1 4.5"
-        radius="0.15"
-        color="yellow"
-        animation="property: material.opacity;
-             from: 0;
-             to: 1;
-             dir: alternate;
-             dur: 1200;
-             loop: true"
-      ></a-sphere>
-      <a-sphere
-        position="1.5 -2 4.5"
-        radius="0.15"
-        color="blue"
-        animation="property: material.opacity;
-             from: 0;
-             to: 1;
-             dir: alternate;
-             dur: 1300;
-             loop: true"
-      ></a-sphere>
-      <a-sphere
-        position="3 -2 3.5"
-        radius="0.15"
-        color="pink"
-        animation="property: material.opacity;
-             from: 0;
-             to: 1;
-             dir: alternate;
-             dur: 1100;
-             loop: true"
-      ></a-sphere>
+     <a-entity id="spheres-container" position="0 0 0"></a-entity>
+      
       <a-entity
         rotation="20 95 -15"
         gltf-model="#giftA"
@@ -253,5 +145,47 @@
       >
       </a-text>
     </a-scene>
+     <script>
+      // 9つの球体のデータを配列として定義
+      const sphereData = [
+        { pos: "3 6 5", color: "yellow", dur: 1000 },
+        { pos: "3 4 4.5", color: "red", dur: 1500 },
+        { pos: "2.5 3 4.5", color: "cyan", dur: 1300 },
+        { pos: "2 1.5 4.5", color: "orange", dur: 1700 },
+        { pos: "3 1 4", color: "green", dur: 1100 },
+        { pos: "2.5 0 4.5", color: "tomato", dur: 1500 },
+        { pos: "3 -1 4.5", color: "yellow", dur: 1200 },
+        { pos: "1.5 -2 4.5", color: "blue", dur: 1300 },
+        { pos: "3 -2 3.5", color: "pink", dur: 1100 },
+      ];
+      // シーンの読み込み完了を待ってから実行
+      document.addEventListener("DOMContentLoaded", () => {
+        const container = document.getElementById("spheres-container");
+        sphereData.forEach((data) => {
+          // 1. a-sphere 要素を作成
+          const sphere = document.createElement("a-sphere");
+          // 2. 基本属性（Attributes）を設定
+          sphere.setAttribute("position", data.pos);
+          sphere.setAttribute("radius", "0.15");
+          sphere.setAttribute("color", data.color);
+          // 3. マテリアル設定（透明度を有効にし、初期値を不透明度0にする）
+          sphere.setAttribute("material", "transparent: true; opacity: 0;");
+          // 4. アニメーション設定
+          sphere.setAttribute(
+            "animation",
+            `
+            property: material.opacity;
+            from: 0;
+            to: 1;
+            dir: alternate;
+            dur: ${data.dur};
+            loop: true
+          `
+          );
+          // 5. コンテナに追加して画面に反映
+          container.appendChild(sphere);
+        });
+      });
+    </script>
   </body>
 </html>
